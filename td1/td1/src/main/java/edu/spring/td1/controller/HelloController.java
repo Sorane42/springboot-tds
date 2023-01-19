@@ -13,6 +13,15 @@ public class HelloController {
         return "Hello world";
     }
 
+    @GetMapping(path={"msg/{c}", "msg/{c}/"})
+    @ResponseBody
+    public String messageAction(@PathVariable("c") String content){
+        return content;
+    }
 
+    @GetMapping(path={"msg/view/{c}", "msg/{c}/"})
+    public String messageViewAction(@PathVariable("c") String content){
+        return "helloView";
+    }
 
 }
