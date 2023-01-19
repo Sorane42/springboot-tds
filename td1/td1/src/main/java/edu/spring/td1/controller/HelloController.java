@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class HelloController {
@@ -21,7 +22,15 @@ public class HelloController {
 
     @GetMapping(path={"msg/view/{c}", "msg/{c}/"})
     public String messageViewAction(@PathVariable("c") String content){
+        int value=220;
+        data.addAttribute("value", value);
         return "helloView";
     }
 
+    @GetMapping("msg/view/2/{c}")
+    public ModelAndView messageViewAction2(@PathVariable("c") String content){
+        ModelAndView mv=new ModelAndView("helloView");
+        mv.addObject("value", 220);
+        return mv;
+    }
 }
