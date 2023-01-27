@@ -1,12 +1,15 @@
 {{> header}}
 <h1>Gestion d'item</h1>
-<a class="iu olive button" href=""
+<a class="iu olive button" href="/new"> Ajouter un item </a>
 <form action = "newItemForm" method="post">
+    {{#msg}}
+
+        <div class="ui success message">
+        {{.}}
+        </div>
+            {{/#msg}}
     <ul>
-        <input type="text" name="nom">
 
-
+{{#items}}
     </ul>
-
-
 {{> footer}}

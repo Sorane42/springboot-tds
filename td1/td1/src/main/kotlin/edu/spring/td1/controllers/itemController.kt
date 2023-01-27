@@ -3,6 +3,8 @@ package edu.spring.td1.controllers
 import Item
 import edu.spring.td1.models.items
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.servlet.mvc.support.RedirectAttributes
+import org.springframework.web.servlet.view.RedirectView
 
 
 @SessionAttributes("items")
@@ -28,13 +30,25 @@ class itemController {
             return elements
         }
 
+    @RequestMapping("/")
+
     @GetMapping("/new")
     fun newAction(
-            @ModelAttribute("nom") item:Item,
-            @SessionAttribute("Items") items:HashSet<Item>
+
     ):String{
-        items.add(item)
+        items.add(items)
         return "newForm"
+    }
+
+    @PostMapping("/addNew")
+    fun addNewAction(
+            @ModelAttribute("nom") item:Item,
+            @SessionAttribute("Items") items:HashSet<Item>,
+            attrs: RedirectAttributes
+    ):RedirectView{
+        items.add(item)
+        attrs.addFlashAttribute("msg","${item.nom} ajouté dans les items")
+        return RedirectView("/")
     }
 
 }
