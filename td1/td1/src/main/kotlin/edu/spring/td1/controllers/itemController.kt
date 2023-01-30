@@ -12,6 +12,7 @@ import org.springframework.web.servlet.view.RedirectView
 @Controller
 class itemController {
 
+    private fun getItemByName(nom:String,items:HashSet<Item>):Item?=items.find { nom==it.nom }
     @ModelAttribute("items")
     fun getItems(): kotlin.collections.List<items?>? {
         return ArrayList<items?>()
@@ -21,7 +22,7 @@ class itemController {
     val Item: Set<items>
         get() {
             var items = HashSet<items>()
-            items.add(items("Foo"))
+            items.add(items(nom="item1"))
             return items
         }
 
@@ -48,4 +49,24 @@ class itemController {
         }
         return RedirectView("/")
     }
+    @GetMapping("/inc/{nom}")
+    fun incrementerEvaluation (nom:String,items:HashSet<items>):RedirectView{
+        for (item in items){
+            if (item.nom==nom){
+                item.evaluation++
+            }
+        }
+        return RedirectView("/")
+    }
+    @GetMapping("/dec/{nom}")
+    fun decrementerEvaluation (nom:String,items:HashSet<items>):RedirectView{
+        for (item in items){
+            if (item.nom==nom){
+                item.evaluation--
+            }
+        }
+        return RedirectView("/")
+    }
+
+
 }
