@@ -1,4 +1,4 @@
-data class Item(var nom: String) {
+data class items(var nom: String) {
     var evaluation:Int=0
 
     /*override fun equals(other: Any?): Boolean {
