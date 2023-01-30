@@ -5,12 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0031b814-05e8-4db7-b477-6a93fb2cde26" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/td1/src/main/resources/templates/partials/message.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/td1/src/main/kotlin/edu/spring/td1/controllers/itemController.kt" beforeDir="false" afterPath="$PROJECT_DIR$/td1/src/main/kotlin/edu/spring/td1/controllers/itemController.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/td1/src/main/kotlin/edu/spring/td1/services/UIMessage.kt" beforeDir="false" afterPath="$PROJECT_DIR$/td1/src/main/kotlin/edu/spring/td1/services/UIMessage.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/td1/src/main/resources/templates/partials/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/td1/src/main/resources/templates/partials/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/td1/src/main/resources/templates/partials/monForm.html" beforeDir="false" afterPath="$PROJECT_DIR$/td1/src/main/resources/templates/partials/monForm.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,6 +48,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/Users/sacha/Desktop/compweb/td1/td1",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
