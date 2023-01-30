@@ -32,7 +32,7 @@ class itemController {
 
     @GetMapping("/new")
     fun newAction():String{
-        return "newForm"
+        return "monForm"
     }
 
     @PostMapping("/addNew")
