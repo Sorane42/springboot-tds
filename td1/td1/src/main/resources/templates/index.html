@@ -9,9 +9,9 @@
         <li>
             {{nom}} <p> évaluation : </p>{{evaluation}}
 
-            <a class="ui teal button" href="/new">Incrémenter</a>
-            <a class="ui teal button" href="/new">Décrémenter</a>
-            <a class="ui teal button" href="/new">Supprimer</a>
+            <a class="ui teal button" href="/inc/{{nom}}">Incrémenter</a>
+            <a class="ui teal button" href="/dec/{{nom}}">Décrémenter</a>
+            <a class="ui teal button" href="/items/delete/{{nom}}">Supprimer</a>
         </li>
         {{/items}}
     </ul>

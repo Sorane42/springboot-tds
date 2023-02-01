@@ -12,7 +12,7 @@ import org.springframework.web.servlet.view.RedirectView
 @Controller
 class itemController {
 
-    private fun getItemByName(nom:String,items:HashSet<Item>):Item?=items.find { nom==it.nom }
+    private fun getItemByName(nom:String,items:HashSet<items>):items?=items.find { nom==it.nom }
     @ModelAttribute("items")
     fun getItems(): kotlin.collections.List<items?>? {
         return ArrayList<items?>()
@@ -50,23 +50,26 @@ class itemController {
         return RedirectView("/")
     }
     @GetMapping("/inc/{nom}")
-    fun incrementerEvaluation (nom:String,items:HashSet<items>):RedirectView{
-        for (item in items){
-            if (item.nom==nom){
-                item.evaluation++
-            }
-        }
+    fun incrementerEvaluation (@PathVariable nom:String, @SessionAttribute("items") items:HashSet<items>, attrs:RedirectAttributes):RedirectView{
+        var item=getItemByName(nom,items)
+        item?.evaluation = item!!.evaluation + 1
         return RedirectView("/")
     }
     @GetMapping("/dec/{nom}")
-    fun decrementerEvaluation (nom:String,items:HashSet<items>):RedirectView{
-        for (item in items){
-            if (item.nom==nom){
-                item.evaluation--
+    fun decrementerEvaluation (@PathVariable nom:String, @SessionAttribute("items") items:HashSet<items>, attrs:RedirectAttributes):RedirectView{
+        var item=getItemByName(nom,items)
+        item?.evaluation = item!!.evaluation - 1
+        return RedirectView("/")
+
+    }
+    @GetMapping("/items/delete/{nom}")
+    fun removeItem(@PathVariable nom:String, @SessionAttribute("items") items:HashSet<items>, attrs:RedirectAttributes):RedirectView {
+
+        for (item in items) {
+            if (item.nom == nom) {
+                items.remove(item)
             }
         }
         return RedirectView("/")
     }
-
-
 }
