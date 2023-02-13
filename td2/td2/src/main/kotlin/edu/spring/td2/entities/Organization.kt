@@ -7,10 +7,22 @@ open class Organization {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     open var id:Int? = null
-    @Column(nullable = false, length = 60)
+    @Column(nullable = false, length = 60, unique = true)
     open lateinit var name:String
     @Column(length = 45)
     open var domain:String?= null
     @Column(length = 45)
     open var aliases:String?= null
+
+    @OneToMany(mappedBy = "organization", fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
+    open val users =HashSet<User>()
+
+    @OneToMany(mappedBy = "organization")
+    open val groups=HashSet<Group>()
+
+    fun addUser(user:User){
+        if(users?.add(user)?:false){
+            user.organization=this
+        }
+    }
 }
