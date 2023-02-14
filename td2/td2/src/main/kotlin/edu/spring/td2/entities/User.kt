@@ -7,21 +7,19 @@ class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     open var id:Int?=null
+
     @Column(length = 30)
     open var firstname:String?=null
     @Column(length = 30)
     open var lastname:String?=null
 
-    @Column(nullable = false, length = 255, unique = true)
+    @Column(length = 255, nullable = false, unique = true)
     open lateinit var email:String
 
-    open var password:String?=null
-
-    open var suspended:Boolean=false
+    open var suspended=false
 
     @ManyToOne
-    @JoinColumn(name="idOrganization",nullable = false)
-    lateinit open var organization:Organization
-
+    @JoinColumn(name="idOrganization", nullable = false)
+    lateinit open var organization: Organization
 
 }

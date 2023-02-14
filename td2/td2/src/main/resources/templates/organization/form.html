@@ -1,0 +1,12 @@
+{{> main/header }}
+<form method="post" action="/orgas/new" class="ui form">
+    {{#organizations}}
+    {{#id}}
+    <input type="hidden" name="id" value="{{.}}">
+    {{/id}}
+    <input type="text" name="name" value="{{name}}" placeholder="Nom" class="ui input" required>
+    <input type="text" name="domain" value="{{domain}}" placeholder="Domaine" class="ui input">
+    <input type="text" name="aliases" value="{{#aliases}}{{.}}{{/aliases}}" placeholder="Alias" class="ui input">
+    {{/organizations}}
+</form>
+    {{> main/footer }}

@@ -3,21 +3,17 @@ package edu.spring.td2.entities
 import jakarta.persistence.*
 
 @Entity
+@Table(name = "Groupe")
 open class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    open var id:Int? = null
-    @Column(nullable = false, length = 60, unique = true)
+    open var id:Int?=null
+
+    @Column(length = 60, nullable = false, unique = true)
     open lateinit var name:String
+
     @Column(length = 255)
-    open var domain:String?= null
-    @Column(length = 45)
-    open var aliases:String?= null
-
-    @ManyToOne
-    @JoinColumn(name="idOrganization",nullable = false)
-    lateinit open var organization:Organization
-
-    @ManyToMany(mappedBy = "groups")
-    open val users:Set<User>?=HashSet()
+    open var email:String?=null
+    @Column(length = 20)
+    open var aliases:String?=null
 }

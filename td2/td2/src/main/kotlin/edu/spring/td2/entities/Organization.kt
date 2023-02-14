@@ -17,9 +17,6 @@ open class Organization {
     @OneToMany(mappedBy = "organization", fetch = FetchType.EAGER, cascade = [CascadeType.ALL])
     open val users =HashSet<User>()
 
-    @OneToMany(mappedBy = "organization")
-    open val groups=HashSet<Group>()
-
     fun addUser(user:User){
         if(users?.add(user)?:false){
             user.organization=this
