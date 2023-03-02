@@ -9,6 +9,7 @@ import edu.spring.td2.entities.User
 import edu.spring.td2.exception.ElementNotFoundException
 import edu.spring.td2.repositories.OrganizationRepository
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.servlet.ModelAndView
 import org.springframework.web.servlet.view.RedirectView
 
 
@@ -35,6 +36,26 @@ class OrgaController {
         return RedirectView("/orgas")
     }
 
+
+
+    @GetMapping("display/{id}")
+    fun display(@PathVariable id:Long,model:ModelMap):String{
+        val option=orgaRepository.findById(id)
+        if(option.isPresent){
+            model["organization"]=option.get()
+            return "/orgas/display"
+        }
+        throw ElementNotFoundException("L'organisation $id n'existe pas")
+    }
+
+    @ExceptionHandler(value = [ElementNotFoundException::class])
+    fun exceptionHandler(ex:RuntimeException):String {
+        val mv=ModelAndView("/main/error")
+        mv.addObject("message",ex.message)
+        return mv
+    }
+
+
     @GetMapping("add/{name}")
     @ResponseBody
     fun testAddAction(@PathVariable name:String):String{
@@ -48,22 +69,6 @@ class OrgaController {
 
         orgaRepository.save(orga)
         return "Organisation $name"
-    }
-
-    @GetMapping("display/{id}")
-    fun display(@PathVariable id:Long,model:ModelMap):String{
-        val option=orgaRepository.findById(id)
-        if(option.isPresent){
-            model["organization"]=option.get()
-            return "/orgas/display"
-        }
-        throw ElementNotFoundException("L'organisation $id n'existe pas")
-    }
-
-    @ExceptionHandler(value = [ElementNotFoundException::class])
-    @ResponseBody
-    fun exceptionHandler(ex:RuntimeException):String {
-        return "Erreur ${ex.message}"
     }
 
 }
