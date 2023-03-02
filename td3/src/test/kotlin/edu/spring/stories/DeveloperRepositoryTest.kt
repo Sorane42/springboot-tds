@@ -58,14 +58,14 @@ class DeveloperRepositoryTest {
         dev.giveUpStory(storyRepository.findByNameAndDeveloperId("Imprimer",dev.id)!!)
         dev.giveUpStory(storyRepository.findByNameAndDeveloperId("Se connecter", dev.id)!!)
         developerRepository.save(dev)
-        assertTrue(storyRepository.findByDeveloperIsNull().count()==2)
+        assertTrue(storyRepository.findByDeveloperIsNull()!!.count()==2)
     }
 
     @Test
     fun deleteDev(){
         var dev=createDevWithStories()
         developerRepository.deleteById(dev.id)
-        assertTrue(storyRepository.findByDeveloperIsNull().count()==2)
+        assertTrue(storyRepository.findByDeveloperIsNull()?.count()==2)
     }
 
     @Test

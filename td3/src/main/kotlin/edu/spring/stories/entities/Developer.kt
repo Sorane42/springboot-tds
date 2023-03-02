@@ -7,7 +7,7 @@ import jakarta.persistence.*
 open class Developer(firstname: String?, lastname: String?) {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    open var id:Int? = null
+    open var id:Int = 0
 
     @Column(length = 30)
     open var firstname:String? = null
@@ -16,7 +16,7 @@ open class Developer(firstname: String?, lastname: String?) {
 
 
     @OneToMany
-    lateinit open var stories: MutableSet<Story>
+    open lateinit var stories: MutableSet<Story>
 
     fun addStory(story: Story) {
         stories.add(story)

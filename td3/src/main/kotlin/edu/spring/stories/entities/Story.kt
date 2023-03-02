@@ -9,12 +9,12 @@ open class Story(name: String?) {
     open var id:Int? = null
 
     @Column(length = 30)
-    open var name:String? = null
+    open lateinit var name:String
 
 
     @ManyToOne
     @JoinColumn(name="idDeveloper", nullable = false)
-    lateinit open var developer: Developer
+    open lateinit var developer: Developer
 
     @ManyToMany
     @JoinTable(name = "story_tag",
