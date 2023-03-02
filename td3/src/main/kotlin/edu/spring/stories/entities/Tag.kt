@@ -4,7 +4,7 @@ import jakarta.persistence.*
 
 
 @Entity
-open class Tag {
+open class Tag(color : String?, label : String?) {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,6 +19,6 @@ open class Tag {
     @JoinTable(name = "story_tag",
         joinColumns = [JoinColumn(name = "idStory")],
         inverseJoinColumns = [JoinColumn(name = "idTag")])
-    open var tags: MutableSet<Tag> = mutableSetOf()
+    open var tags: MutableSet<Story> = HashSet()
 
 }

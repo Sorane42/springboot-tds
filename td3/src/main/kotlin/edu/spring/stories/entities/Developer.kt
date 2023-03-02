@@ -4,7 +4,7 @@ import jakarta.persistence.*
 
 
 @Entity
-open class Developer() {
+open class Developer(firstname: String?, lastname: String?) {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     open var id:Int? = null
@@ -14,7 +14,20 @@ open class Developer() {
     @Column(length = 30)
     open var lastname:String? = null
 
+
     @OneToMany
-    @JoinColumn(name="idStory", nullable = false)
-    lateinit open var stories: Story
+    lateinit open var stories: MutableSet<Story>
+
+    fun addStory(story: Story) {
+        stories.add(story)
+    }
+
+    fun giveUpStory(story: Story) {
+        stories.remove(story)
+    }
+
+    @PreRemove
+    fun preRemove() {
+        stories.removeAll(stories)
+    }
 }
