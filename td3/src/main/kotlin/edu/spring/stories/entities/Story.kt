@@ -14,7 +14,7 @@ open class Story(name: String?) {
 
     @ManyToOne
     @JoinColumn(name="idDeveloper", nullable = false)
-    open lateinit var developer: Developer
+    open var developer: Developer? =null
 
     @ManyToMany
     @JoinTable(name = "story_tag",

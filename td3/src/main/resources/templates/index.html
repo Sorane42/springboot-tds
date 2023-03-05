@@ -1,9 +1,130 @@
 {{> main/header}}
-<h2>Développeurs</h2>
-<p> Ajout Rapide d'un développeur </p>
-<input type="text" id="devFirstName" placeholder="Prénom du développeur">
-<input type="text" id="devLastName" placeholder="Nom du développeur">
-<input type="submit" id="addDev" value="+">
+<h2>Développeurs
+    <div class="ui olive left pointing label">
+        <div class="count-developers">
+            {{nbDeveloper}}
+        </div>
+    </div>
+</h2>
+<form action="developer/add" method="post">
+    <div class="ui input">
+        <input type="text" name="devFirstName" placeholder="Prénom du développeur">
+        <input type="text" name="devLastName" placeholder="Nom du développeur">
+    </div>
+    <button class="ui button">+</button>
+</form>
+<table class="ui table">
+    <thead>
+    <tr>
+        <th>Développeur</th>
+        <th>Stories</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#develop}}
+    <tr>
+   
+        <td>
+            <ul>
+                {{#stories}}
+                <div class="dev-story">
+                    <div class="ui image label">
+                        {{name}}
+                        <div class="giveup-story">
+                            <a href="story/{{id}}/giveup"><i class="remove icon"></i></a>
+                        </div>
+                    </div>
+                </div>
+                {{/stories}}
+            </ul>
+        </td>
+        <td>
+            <form action="developer/{{id}}/story" method="post">
+                <div class="ui input">
+                    <input type="text" id="storyname" name="storyname" placeholder="story name">
+                </div>
+                <button class="ui green button" type="submit" value="add">Ajouter US et Affecter</button>
+            </form>
+            <div class="delete-developer">
+                <a class="ui black button" href="developer/{{id}}/delete">
+                    <i class="sign out alternate icon"></i>
+                    Quitter le projet
+                </a>
+            </div>
+        </td>
+    </tr>
+    {{/develop}}
+    {{^develop}}
+    <tr>
+        <td colspan="3">
+            <div class="ui brown icon message">
+                <i class="exclamation circle icon"></i>
+                <div class="content">
+                    <div class="header">
+                        Pas de développeur
+                    </div>
+                    <p>Pas de développeurs dans la base de données.</p>
+                </div>
+            </div>
+        </td>
+    </tr>
+    {{/develop}}
+    </tbody>
+</table>
 
+<h2>User stories à répartir
+    <div class="ui red left pointing label">
+        <div class="count-stories">
+            {{nbStory}}
+        </div>
+    </div>
+</h2>
 
+<table class="ui table">
+    <thead>
+    <tr>
+        <th>US</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#stories}}
+    <tr>
+        <td>{{name}}</td>
+        <td>
+            <form action="story/{{id}}/affect" method="post">
+                <select class="ui selection dropdown" name="developer_id" id="developer_id">
+                    {{#developers}}
+                    <option value="{{id}}">{{firstname}} {{lastname}}</option>
+                    {{/developers}}
+                    {{^developers}}
+                    <option value="">Pas de développeur à affecter</option>
+                    {{/developers}}
+                </select>
+                <button value="affect" name="story-action" class="ui button">+</button>
+            </form>
+            <form action="story/{{id}}/remove" method="post">
+                <button value="remove" name="story-action" class="red icon ui button">x</button>
+            </form>
+        </td>
+    </tr>
+    {{/stories}}
+    {{^stories}}
+    <tr>
+        <td colspan="2">
+            <div class="ui green icon message">
+                <i class="info circle icon"></i>
+                <div class="content">
+                    <div class="header">
+                        Aucune story
+                    </div>
+                    <p>Il n'y a pas d'US à attribuer dans la base de données.</p>
+                </div>
+            </div>
+        </td>
+    </tr>
+    {{/stories}}
+    </tbody>
+</table>
 {{> main/footer}}
