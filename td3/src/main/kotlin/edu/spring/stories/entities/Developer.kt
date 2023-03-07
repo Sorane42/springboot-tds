@@ -5,38 +5,43 @@ import jakarta.persistence.*
 
 @Entity
 open class Developer() {
+    constructor(firstname:String, lastname:String):this(){
+        this.firstname=firstname
+        this.lastname=lastname
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    open var id:Int = 0
+    open var id = 0
 
     @Column(length = 30)
-    open var firstname:String? = ""
+    open var firstname: String? = null
+
     @Column(length = 30)
-    open var lastname:String? = ""
+    open var lastname: String? = null
 
+    @OneToMany(mappedBy = "developer", cascade = [CascadeType.PERSIST, CascadeType.MERGE])
+    open val stories= mutableSetOf<Story>()
 
-    @OneToMany (mappedBy = "developer", cascade = [CascadeType.PERSIST, CascadeType.MERGE, CascadeType.ALL])
-    open lateinit var stories: MutableSet<Story>
-
-    fun addStory(story: Story) {
-        stories.add(story)
-        story.developer = this
+    fun addStory(story:Story):Boolean {
+        if(stories.add(story)){
+            story.developer=this
+            return true
+        }
+        return false
     }
 
-    fun giveUpStory(story: Story) {
-        stories.remove(story)
+    fun giveUpStory(story:Story):Boolean {
+        if(stories.remove(story)){
+            story.developer=null
+            return true
+        }
+        return false
     }
 
     @PreRemove
-    fun preRemove() {
-        stories.forEach {
-            it.developer = null
+    open fun preRemove() {
+        for (story in stories){
+            story.developer=null
         }
-        stories.clear()
-    }
-
-    constructor(firstname: String, lastname: String) : this() {
-        this.firstname = firstname
-        this.lastname = lastname
     }
 }

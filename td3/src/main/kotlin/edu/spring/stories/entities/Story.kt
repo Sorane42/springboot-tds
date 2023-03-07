@@ -3,24 +3,23 @@ package edu.spring.stories.entities
 import jakarta.persistence.*
 
 @Entity
-open class Story(name: String?) {
+open class Story() {
+    constructor(name:String):this(){
+        this.name=name
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    open var id:Int? = null
+    open val id = 0
 
-    @Column(length = 30)
-    open lateinit var name:String
+    @Column(length = 60, nullable = false)
+    open lateinit var name: String
 
+    open var description:String=""
 
-    @ManyToOne
-    @JoinColumn(name="idDeveloper", nullable = false)
-    open var developer: Developer? =null
+    @ManyToOne(optional = true)
+    open var developer: Developer?=null
 
     @ManyToMany
-    @JoinTable(name = "story_tag",
-        joinColumns = [JoinColumn(name = "idStory")],
-        inverseJoinColumns = [JoinColumn(name = "idTag")])
-    open var tags: MutableSet<Tag> = HashSet()
-
+    open val tags= mutableSetOf<Tag>()
 
 }
