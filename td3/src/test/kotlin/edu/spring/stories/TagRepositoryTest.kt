@@ -2,8 +2,8 @@ package edu.spring.stories
 
 import edu.spring.stories.entities.Story
 import edu.spring.stories.entities.Tag
-import edu.spring.stories.repositories.StoryRepository
-import edu.spring.stories.repositories.TagRepository
+import edu.spring.stories.repositories.DogRepository
+import edu.spring.stories.repositories.ToyRepository
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -12,10 +12,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 @DataJpaTest
 class TagRepositoryTest {
     @Autowired
-    lateinit var tagRepository: TagRepository
+    lateinit var tagRepository: ToyRepository
 
     @Autowired
-    lateinit var storyRepository: StoryRepository
+    lateinit var storyRepository: DogRepository
 
     @Test
     fun emptyAtInitialization(){

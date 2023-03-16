@@ -2,8 +2,8 @@ package edu.spring.stories
 
 import edu.spring.stories.entities.Story
 import edu.spring.stories.entities.Developer
-import edu.spring.stories.repositories.StoryRepository
-import edu.spring.stories.repositories.DeveloperRepository
+import edu.spring.stories.repositories.DogRepository
+import edu.spring.stories.repositories.MasterRepository
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -12,10 +12,10 @@ import org.junit.jupiter.api.Assertions.*
 @DataJpaTest
 class DeveloperRepositoryTest {
     @Autowired
-    lateinit var developerRepository: DeveloperRepository
+    lateinit var developerRepository: MasterRepository
 
     @Autowired
-    lateinit var storyRepository: StoryRepository
+    lateinit var storyRepository: DogRepository
 
     private fun createDevWithStories():Developer{
         var developer=Developer("John","DOE")

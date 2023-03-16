@@ -2,8 +2,8 @@ package edu.spring.stories
 
 import edu.spring.stories.entities.Story
 import edu.spring.stories.entities.Developer
-import edu.spring.stories.repositories.StoryRepository
-import edu.spring.stories.repositories.DeveloperRepository
+import edu.spring.stories.repositories.DogRepository
+import edu.spring.stories.repositories.MasterRepository
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
@@ -13,10 +13,10 @@ import org.springframework.dao.InvalidDataAccessApiUsageException
 @DataJpaTest
 class StoryRepositoryTest {
     @Autowired
-    lateinit var storyRepository: StoryRepository
+    lateinit var storyRepository: DogRepository
 
     @Autowired
-    lateinit var developerRepository: DeveloperRepository
+    lateinit var developerRepository: MasterRepository
 
     @Test
     fun emptyAtInitialization(){

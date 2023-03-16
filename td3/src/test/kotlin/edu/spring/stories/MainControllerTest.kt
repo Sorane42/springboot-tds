@@ -1,100 +1,175 @@
 package edu.spring.stories
 
-import edu.spring.stories.controllers.MainController
-import edu.spring.stories.entities.Story
-import edu.spring.stories.entities.Developer
-import edu.spring.stories.repositories.StoryRepository
-import edu.spring.stories.repositories.DeveloperRepository
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.Mockito.`when`
-import org.mockito.junit.jupiter.MockitoExtension
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.hamcrest.CoreMatchers.containsString
+
+import io.github.bonigarcia.wdm.WebDriverManager
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
-import org.springframework.beans.factory.annotation.Autowired
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.openqa.selenium.By
+import org.openqa.selenium.By.ByCssSelector
+import org.openqa.selenium.WebDriver
+import org.openqa.selenium.WebElement
+import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.chrome.ChromeOptions
+import org.openqa.selenium.support.ui.ExpectedConditions
+import org.openqa.selenium.support.ui.WebDriverWait
+import org.springframework.boot.jdbc.EmbeddedDatabaseConnection
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
+import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
+import java.time.Duration
+import java.util.concurrent.TimeUnit
 
-@ExtendWith(MockitoExtension::class)
-@WebMvcTest(MainController::class)
-@AutoConfigureTestDatabase(replace = Replace.NONE)
-class MainControllerTest {
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
+@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
+class ApplicationTest {
 
-    @MockBean
-    lateinit var developerRepository: DeveloperRepository
+    // CSS selectors
+    private val COUNT_MASTERS=".count-masters"
+    private val COUNT_DOGS=".count-dogs"
+    private val COUNT_MASTER_DOGS="td .count-master-dogs"
+    private val DELETE_MASTER=".delete-master.button"
+    private val DELETE_DOG="button[value='remove'][name='dog-action']:first-child"
+    private val ADD_MASTER="form[action='/master/add'] button"
+    private val ADD_DOG="button[value='add']"
+    private val GIVEUP_DOG="button[value='give-up']"
 
-    @MockBean
-    lateinit var storyRepository: StoryRepository
+    lateinit var driver: WebDriver
 
-    @Autowired
-    lateinit var mockMvc: MockMvc
+    @LocalServerPort
+    var randomServerPort = 0
 
-    @Test
+    var baseUrl: String? = null
+
+    @BeforeEach
     @Throws(Exception::class)
-    fun defaultPageIsEmptyWithNoDevsAndStories() {
-        `when`(developerRepository.findAll()).thenReturn(listOf())
-        this.mockMvc.perform(get("/")).
-        andExpect(status().isOk).
-        andExpect(content().string(containsString("Il n'y a pas de développeurs dans la base de données."))).
-        andExpect(content().string(containsString("Il n'y a pas d'US à attribuer dans la base de données."))).
-        andExpect(content().string(containsString("Ajout rapide de développeur"))).
-        andExpect(view().name("index"))
+    fun setUp() {
+        WebDriverManager.chromedriver().setup()
+        val options = ChromeOptions()
+        options.addArguments("--no-sandbox")
+        options.addArguments("--disable-dev-shm-usage")
+        options.addArguments("--headless")
+        driver = ChromeDriver(options)
+        baseUrl = "http://127.0.0.1:$randomServerPort"
+        navigateTo("")
+        (driver as ChromeDriver).manage().window().maximize()
+        (driver as ChromeDriver).manage().timeouts().implicitlyWait(120, TimeUnit.MILLISECONDS)
+    }
+
+    @AfterEach
+    @Throws(Exception::class)
+    fun tearDown() {
+        driver.quit()
+    }
+
+    private fun navigateTo(relativeURL: String) {
+        driver.navigate().to(baseUrl + relativeURL)
+    }
+
+    private fun fillElement(name: String, content: String) {
+        val elm: WebElement? = driver.findElement(By.name(name))
+        elm?.sendKeys(content)
+    }
+
+    private fun btnClick(cssSelector: String) {
+        driver.findElement(ByCssSelector.cssSelector(cssSelector))?.click()
+    }
+
+    private fun assertElementContainsText(cssSelector: String, text: String) {
+        val elmText=driver.findElement(ByCssSelector.cssSelector(cssSelector))?.text
+        Assertions.assertTrue(elmText?.contains(text)!!)
+    }
+
+    private fun assertElementAttributeContainsText(
+        cssSelector: String, attribute: String,
+        text: String
+    ) {
+        Assertions.assertTrue(
+            (driver.findElement(ByCssSelector.cssSelector(cssSelector))?.getAttribute(attribute)?.contains(text)!!)
+        )
+    }
+
+    fun waitForTextToAppear(textToAppear: String?, element: WebElement?, timeout: Long) {
+        val wait = WebDriverWait(driver, Duration.ofMillis(timeout))
+        wait.until(ExpectedConditions.textToBePresentInElement(element, textToAppear))
+    }
+
+    fun waitForTextToAppear(textToAppear: String?, element: WebElement?) {
+        waitForTextToAppear(textToAppear, element, 3000)
+    }
+
+    private fun checkElementIsDisplayed(cssSelector: String) {
+        Assertions.assertTrue(driver.findElement(ByCssSelector.cssSelector(cssSelector))?.isDisplayed!!)
     }
 
     @Test
-    fun displayOneUser() {
-        `when`(developerRepository.findAll()).thenReturn(listOf(Developer("Bob", "MockDuke")))
-        this.mockMvc.perform(
-                get("/")).andExpect(status().isOk).andExpect(content().string(containsString("MockDuke")))
-    }
-
-    @Test
-    fun displayOneUserWithOneStory() {
-        val developer=Developer("Bob", "MockDuke")
-        val story=Story("Imprimer")
-        developer.stories.add(story)
-        `when`(developerRepository.findAll()).thenReturn(listOf(developer))
-        `when`(storyRepository.findAll()).thenReturn(listOf(story))
-        this.mockMvc.perform(
-            get("/")).
-        andExpect(status().isOk).
-        andExpect(content().string(containsString("Imprimer")))
+    fun homePageLoadsWithMessages() {
+        //Vérification de la présence des messages
+        Assertions.assertTrue(driver.currentUrl?.contains("")!!);
+        assertElementContainsText("body", "Il n'y a pas de maître dans la base de données.");
+        assertElementContainsText("body", "Il n'y a pas de chien à l'adoption dans la base de données.");
+        checkElementIsDisplayed("input[name=firstname]")
     }
 
 
     @Test
-    fun displayOneUserWithOneStoryAndOneNonAffectedStory() {
-        val developer=Developer("Bob", "MockDuke")
-        val story=Story("Imprimer")
-        val storySolo=Story("Se connecter")
-        developer.stories.add(story)
-        `when`(developerRepository.findAll()).thenReturn(listOf(developer))
-        `when`(storyRepository.findAll()).thenReturn(listOf(story, storySolo))
-        `when`(storyRepository.findByDeveloperIsNull()).thenReturn(listOf(storySolo))
-        this.mockMvc.perform(
-            get("/")).
-        andExpect(status().isOk).
-        andExpect(content().string(containsString("Imprimer"))).
-        andExpect(content().string(containsString("Se connecter")))
-    }
+    fun addMasterAndDogs() {
+        assertElementContainsText(COUNT_MASTERS, "0")
 
-    @Test
-    fun displayOneUserWithOneStoryAndRemoveUser() {
-        val developer=Developer("Bob", "MockDuke")
-        developer.id=1000
-        val story=Story("Imprimer")
-        developer.stories.add(story)
-        `when`(developerRepository.findAll()).thenReturn(listOf(developer))
-        this.mockMvc.perform(
-            get("/")).andExpect(status().isOk).andExpect(content().string(containsString("Imprimer")))
-        this.mockMvc.perform(
-            get("/developer/1000/delete")).andExpect(status().isFound)
-        Assertions.assertEquals(0, developerRepository.count())
-    }
+        //Ajout d'un maître
+        fillElement("firstname", "John")
+        fillElement("lastname", "DOE")
+        btnClick(ADD_MASTER)
+        assertElementContainsText("body", "John DOE")
+        assertElementContainsText(COUNT_MASTERS, "1")
 
+        //Ajout d'un chien
+        checkElementIsDisplayed("input[name=name]")
+        assertElementContainsText(COUNT_MASTER_DOGS, "0")
+        fillElement("name", "Milou")
+        btnClick(ADD_DOG)
+        assertElementContainsText(COUNT_MASTER_DOGS, "1")
+
+        //Ajout d'un chien
+        fillElement("name", "Rex")
+        btnClick(ADD_DOG)
+        assertElementContainsText(COUNT_MASTER_DOGS, "2")
+
+        //Abandon d'un chien qui n'existe pas
+        fillElement("name", "notExistingDog")
+        btnClick(GIVEUP_DOG)
+        assertElementContainsText(COUNT_MASTER_DOGS, "2")
+        assertElementContainsText(COUNT_DOGS, "0")
+
+        //Abandon d'un chien
+        fillElement("name", "Rex")
+        btnClick(GIVEUP_DOG)
+        assertElementContainsText(COUNT_MASTER_DOGS, "1")
+        assertElementContainsText("body", "Rex")
+        assertElementContainsText(COUNT_DOGS, "1")
+
+        //Disparition du maître
+        btnClick(DELETE_MASTER)
+        assertElementContainsText(COUNT_MASTERS, "0")
+        assertElementContainsText("body", "Il n'y a pas de maître dans la base de données.");
+        assertElementContainsText("body", "Rex")
+        assertElementContainsText("body", "Milou")
+        assertElementContainsText("body","Pas d'adoptant")
+        assertElementContainsText(COUNT_DOGS, "2")
+
+        //Départ d'un chien
+        btnClick(DELETE_DOG)
+        assertElementContainsText(COUNT_DOGS, "1")
+
+        //Départ d'un chien
+        btnClick(DELETE_DOG)
+        assertElementContainsText(COUNT_DOGS, "0")
+        assertElementContainsText("body", "Il n'y a pas de chien à l'adoption dans la base de données.");
+
+    }
 }

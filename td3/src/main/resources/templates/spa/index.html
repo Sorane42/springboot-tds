@@ -1,0 +1,9 @@
+<h1>Maîtres <span class="ui label">{!masters.length!}</span></h1>
+<ul>
+    <li v-for="master in masters">
+        {!master.firstname!} {!master.lastname!} <i class="remove icon" @click="remove(master)"></i>
+    </li>
+</ul>
+
+{{> /main/footer }}
+{{{vue}}}
