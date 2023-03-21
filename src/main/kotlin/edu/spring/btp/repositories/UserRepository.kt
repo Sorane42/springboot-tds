@@ -9,5 +9,5 @@ interface UserRepository: JpaRepository<User, Int> {
     fun getRandomUser(): User
 
     fun findByUsernameOrEmail(username:String,email:String):User
-    
+
 }

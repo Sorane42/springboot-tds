@@ -31,9 +31,9 @@ class Domain() {
 
     @OneToMany(mappedBy = "domain")
     open var complaints= mutableListOf<Complaint>()
-
+/*
     @Column
-    open var complainsCount: Int = 0
+    open var complainsCount: Int = 0*/
 
     fun getComplaintsCount(): Int {
         return complaints.size
