@@ -1,0 +1,8 @@
+2023-03-21 10:43:40 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "complaint""provider""domain" non trouvée
+Table "complaint""provider""domain" not found; SQL statement:
+SELECT * FROM "complaint""provider""domain" [42102-214]
+2023-03-21 10:43:50 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "provider""domain" non trouvée
+Table "provider""domain" not found; SQL statement:
+SELECT * FROM "provider""domain" [42102-214]

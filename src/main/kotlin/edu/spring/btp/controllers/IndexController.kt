@@ -36,24 +36,23 @@ class IndexController {
         return "index"
     }
 
-    @RequestMapping("/complaints/{domain}")
-    fun getComplaints(@PathVariable domain:String):String{
-        val domain=domainRepository.findByName(domain)
-        println(domain)
-        return "index"
-    }
+        @RequestMapping("/complaints/{domain}")
+        fun getComplaints(@PathVariable domain:String, model : Model):String{
+            model.addAttribute("complaints",complaintRepository.findByDomainName(domain))
+            return "complaints"
+        }
 /*
-    @RequestMapping("/complaints/{domain}/new")
-    fun getNewComplaint(@PathVariable domain:String):String{
+        @RequestMapping("/complaints/{domain}/new")
+        fun getNewComplaint(@PathVariable domain:String):String{
 
-    }
+        }
 
 
-    @RequestMapping("/login")
+        @RequestMapping("/login")
 
-    @RequestMapping("/signup")
+        @RequestMapping("/signup")
 
-    @RequestMapping("/logout")
-    */
+        @RequestMapping("/logout")
+        */
 
 }
