@@ -2,12 +2,14 @@ package edu.spring.btp.controllers
 
 
 import edu.spring.btp.entities.Domain
+import edu.spring.btp.entities.Complaint
+import edu.spring.btp.entities.User
+import edu.spring.btp.entities.Provider
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.ModelAttribute
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.*
+import org.springframework.web.servlet.view.RedirectView
 
 @Controller
 @RequestMapping("/")
@@ -36,23 +38,41 @@ class IndexController {
         return "index"
     }
 
-        @RequestMapping("/complaints/{domain}")
-        fun getComplaints(@PathVariable domain:String, model : Model):String{
+    @RequestMapping("/complaints/{domain}")
+    fun getComplaints(@PathVariable domain:String, model : Model):String{
             model.addAttribute("complaints",complaintRepository.findByDomainName(domain))
             return "complaints"
         }
-/*
-        @RequestMapping("/complaints/{domain}/new")
-        fun getNewComplaint(@PathVariable domain:String):String{
+        @PostMapping("complaints/{domain}/new")
+        fun newComplaint(
+            @PathVariable domain:String,
+            @RequestParam("title") title:String,
+            @RequestParam("description") description:String,
+            ): String {
+                println(title)
+                var complaint = Complaint()
+                complaint.title = title
+                complaint.description = description
+                complaint.domain = domainRepository.findByName(domain)
+                complaintRepository.save(complaint)
+                return "redirect:/complaints/$domain"
+            }
 
+        @RequestMapping("complaints/{domain}/new")
+        fun newComplaint(@PathVariable domain:String, model:Model):String{
+            model.addAttribute("domain", domainRepository.findByName(domain))
+            return "forms/complaint"
         }
 
+        @RequestMapping("login")
+        fun login():String{
+            return "login"
+        }
 
-        @RequestMapping("/login")
+    @RequestMapping("signup")
+    fun signup():String{
+        return "signup"
+    }
 
-        @RequestMapping("/signup")
-
-        @RequestMapping("/logout")
-        */
 
 }

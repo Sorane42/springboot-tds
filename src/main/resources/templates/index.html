@@ -1,3 +1,39 @@
 {{> main/header }}
 
+{{#domain}}
+<span class="ui big blue text">{{name}}</span>
+<br>
+<span class="ui big text">Domaine(s)</span>
+<div class="ui label">
+    {{children.size}}
+</div>
+<div class="ui four cards">
+    {{#children}}
+    <div class="card">
+        <div class="content">
+            <div class="header">{{name}}</div>
+            <div class="description">
+                {{providers.size}} providers
+            </div>
+            {{description}}
+            <br>
+            <i class="purple bug icon"></i>
+            <a href="/complaints/{{name}}">{{complaints.size}} plaintes</a>
+            <div class="ui label">
+                {{complaints.size}}
+            </div>
+
+        </div>
+        {{#hasChildren}}
+        <div class="ui button" href="domain/{{name}}">
+            <i class="door open icon"></i>
+            Ouvrir
+        </div>
+        {{/hasChildren}}
+    </div>
+    {{/children}}
+</div>
+
+{{/domain}}
+
 {{> main/footer }}

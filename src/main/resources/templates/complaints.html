@@ -1,0 +1,15 @@
+{{> main/header}}
+
+<div class="ui four cards">
+    {{#complaints}}
+
+    <div class="card">
+        <div class="content">
+            <div class="header">{{title}}</div>
+            <div class="description">{{description}}</div>
+            <div class="header">{{user}}</div>
+        </div>
+    </div>
+    {{/complaints}}
+</div>
+{{> main/footer}}
